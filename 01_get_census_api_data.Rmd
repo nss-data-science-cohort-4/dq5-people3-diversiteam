@@ -1,0 +1,64 @@
+---
+title: "Census API Data"
+author: "Veronica Ikeshoji-Orlati"
+date: "11/24/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+### Choosing the data  
+
+##### First, take a look at all of the available US Census APIs
+``` {r}
+# Load the censusapi library
+library(censusapi)
+
+# Load other data-cleaning libraries
+library(tidyr)
+library(stringr)
+library(dplyr)
+
+# Create a new dataframe with the full list of available census APIs
+apis <- listCensusApis()
+
+# Take a look at the available APIs
+# View(apis)
+```
+
+##### Balancing breadth and depth, we decided to use the 2018 ACS 5-year data  
+Look at the metadata and make some decisions about what to keep (to-do offline).
+``` {r}
+# Create a new dataframe to store the metadata for the 2018 ACS 5-year dataset
+acs_vars <- listCensusMetadata(
+ name = "acs/acs5/profile",
+ vintage = "2018",
+ type = "variables"
+)
+
+# Take a look at the metadata dataframe
+# View(acs_vars)
+
+# Count the number of times '!!' shows up as a separator in the `label` field
+max(str_count(acs_vars$label, "!!"))
+
+# Split the `label` field into their own fields and keep the original `label` field
+acs_vars <- acs_vars %>%
+     separate(
+     label,
+     c('label_01', 'label_02', 'label_03', 'label_04', 'label_05', 'label_06', 'label_07', 'label_08'),
+     sep = "!!",
+     remove = FALSE,
+     convert = FALSE
+     )
+
+# Order by the `label_02` column
+acs_vars <- arrange(acs_vars, label_01, label_02, label_03, label_04, label_05, label_06, label_07, label_08)
+```
+
+##### Write to a CSV for group perusal
+
+``` {r}
+write.csv(acs_vars, "data/acs_5y_2018_metadata.csv", row.names = FALSE)
+```
