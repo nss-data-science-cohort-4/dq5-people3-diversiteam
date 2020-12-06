@@ -62,3 +62,18 @@ acs_vars <- arrange(acs_vars, concept, label_01, label_02, label_03, label_04, l
 ``` {r}
 write.csv(acs_vars, "data/acs_5y_2018_metadata.csv", row.names = FALSE)
 ```
+
+##### Start looking at the fields in the ACS 2018 5-year data
+``` {r}
+# Take a look at the unique values in the concept field
+acs_concepts <- unique(acs_vars$concept)
+View(acs_concepts)
+
+# Take a look at the unique values in the label_01 field
+acs_label_01 <- unique(acs_vars$label_01)
+View(acs_label_01)
+
+# Take a look at the unique values in the label_02 field
+acs_label_02 <- unique(acs_vars$label_02)
+View(acs_label_02)
+```
