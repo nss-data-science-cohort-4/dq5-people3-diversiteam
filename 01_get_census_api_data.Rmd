@@ -54,7 +54,7 @@ acs_vars <- acs_vars %>%
      )
 
 # Order by the `label_02` column
-acs_vars <- arrange(acs_vars, label_01, label_02, label_03, label_04, label_05, label_06, label_07, label_08)
+acs_vars <- arrange(acs_vars, concept, label_01, label_02, label_03, label_04, label_05, label_06, label_07, label_08)
 ```
 
 ##### Write to a CSV for group perusal
