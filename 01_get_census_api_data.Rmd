@@ -77,3 +77,24 @@ View(acs_label_01)
 acs_label_02 <- unique(acs_vars$label_02)
 View(acs_label_02)
 ```
+
+``` {r}
+
+label_02s <- c('DISABILITY STATUS OF THE CIVILIAN NONINSTITUTIONALIZED POPULATION',
+'EDUCATIONAL ATTAINMENT',
+'HISPANIC OR LATINO AND RACE',
+'HOUSEHOLDS BY TYPE',
+'LANGUAGE SPOKEN AT HOME',
+'MARITAL STATUS',
+'PERCENTAGE OF FAMILIES AND PEOPLE WHOSE INCOME IN THE PAST 12 MONTHS IS BELOW THE POVERTY LEVEL',
+'SEX AND AGE',
+'U.S. CITIZENSHIP STATUS',
+'VETERAN STATUS')
+
+target_acs_vars <- acs_vars %>% 
+        filter(label_02 %in% label_02s) %>% 
+        filter(label_01 == "Estimate")
+
+View(target_acs_vars)
+```
+
