@@ -64,6 +64,8 @@ write.csv(acs_vars, "data/acs_5y_2018_metadata.csv", row.names = FALSE)
 ```
 
 ##### Start looking at the fields in the ACS 2018 5-year data
+
+Just a preliminary exploration.
 ``` {r}
 # Take a look at the unique values in the concept field
 acs_concepts <- unique(acs_vars$concept)
@@ -78,8 +80,10 @@ acs_label_02 <- unique(acs_vars$label_02)
 View(acs_label_02)
 ```
 
-``` {r}
+##### Select only the labels we need for the project
 
+``` {r}
+# Create a list of the label_02 values we want to filter on
 label_02s <- c('DISABILITY STATUS OF THE CIVILIAN NONINSTITUTIONALIZED POPULATION',
 'EDUCATIONAL ATTAINMENT',
 'HISPANIC OR LATINO AND RACE',
@@ -91,10 +95,57 @@ label_02s <- c('DISABILITY STATUS OF THE CIVILIAN NONINSTITUTIONALIZED POPULATIO
 'U.S. CITIZENSHIP STATUS',
 'VETERAN STATUS')
 
+# Create a new dataframe for only the variables we want and drop the columns we won't need
 target_acs_vars <- acs_vars %>% 
         filter(label_02 %in% label_02s) %>% 
-        filter(label_01 == "Estimate")
+        filter(label_01 == "Estimate") %>% 
+        select(-one_of(c("label", "label_07", "label_08", "predicateType", "group", "limit", "attributes", "required")))
 
-View(target_acs_vars)
+# Did it work?
+# View(target_acs_vars)
+```
+
+##### Get the data for Davidson County, TN
+
+Link to the state / county codes here:
+``` {r}
+
+# Check to see what geo fields there are in the 2018 ACS 5-year dataset
+listCensusMetadata(
+        name = "acs/acs5/profile",
+        vintage = "2018",
+        type = "geography"
+) # %>% # add me if you want to view it immediately
+  #      View()
+
+# Turn the name column from our target_acs_vars table into a list
+target_names <- target_acs_vars$name
+
+# Check to see if it worked
+# View(target_names)
+
+# Get the data we want from the census API
+acs_data <- getCensus(
+        name = "acs/acs5/profile",
+        vintage = "2018",
+        region = "county:037",
+        regionin = "state:47",
+        vars = target_names
+)
+
+# Pivot the dataframe so there aren't 195 columns
+acs_data <- pivot_longer(
+        acs_data,
+        cols = starts_with("DP"),
+        names_to = "name",
+        values_to = "value"
+)
+
+# Join the dataframe to the metadata dataframe to get all of the label information
+acs_data <-
+        inner_join(acs_data, target_acs_vars, by = "name", copy = FALSE)
+
+# Write it out to a csv
+write.csv(acs_data, "data/acs_5y_2018_data.csv", row.names = FALSE)
 ```
 
