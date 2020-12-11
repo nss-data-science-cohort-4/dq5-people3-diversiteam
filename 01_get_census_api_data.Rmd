@@ -97,14 +97,92 @@ label_02s <- c('DISABILITY STATUS OF THE CIVILIAN NONINSTITUTIONALIZED POPULATIO
 'U.S. CITIZENSHIP STATUS',
 'VETERAN STATUS')
 
+vals <- c('DP05_0071E',
+'DP05_0070E',
+'DP05_0027E',
+'DP05_0026E',
+'DP02_0119E',
+'DP02_0118E',
+'DP02_0111E',
+'DP02_0113E',
+'DP02_0112E',
+'DP02_0117E',
+'DP02_0116E',
+'DP02_0121E',
+'DP02_0120E',
+'DP02_0115E',
+'DP02_0114E',
+'DP02_0110E',
+'DP02_0035E',
+'DP02_0031E',
+'DP02_0032E',
+'DP02_0033E',
+'DP02_0034E',
+'DP02_0030E',
+'DP02_0029E',
+'DP02_0025E',
+'DP02_0026E',
+'DP02_0027E',
+'DP02_0028E',
+'DP02_0024E',
+'DP02_0094E',
+'DP02_0095E',
+'DP02_0093E',
+'DP02_0069E',
+'DP02_0068E',
+'DP05_0079E',
+'DP05_0080E',
+'DP05_0078E',
+'DP05_0081E',
+'DP05_0082E',
+'DP05_0083E',
+'DP05_0077E',
+'DP05_0007E',
+'DP05_0008E',
+'DP05_0021E',
+'DP05_0009E',
+'DP05_0010E',
+'DP05_0011E',
+'DP05_0012E',
+'DP05_0006E',
+'DP05_0013E',
+'DP05_0014E',
+'DP05_0023E',
+'DP05_0015E',
+'DP05_0031E',
+'DP05_0030E',
+'DP05_0029E',
+'DP05_0024E',
+'DP05_0016E',
+'DP05_0017E',
+'DP05_0003E',
+'DP05_0002E',
+'DP05_0019E',
+'DP05_0001E',
+'DP02_0075E',
+'DP02_0074E',
+'DP02_0077E',
+'DP02_0076E',
+'DP02_0060E',
+'DP02_0063E',
+'DP02_0064E',
+'DP02_0067E',
+'DP02_0065E',
+'DP02_0061E',
+'DP02_0066E',
+'DP02_0059E',
+'DP02_0062E',
+'DP02_0058E')
+
 # Create a new dataframe for only the variables we want and drop the columns we won't need
 target_acs_vars <- acs_vars %>% 
         filter(label_02 %in% label_02s) %>% 
+        filter(name %in% vals) %>% 
         filter(label_01 == "Estimate") %>% 
         filter(concept != "SELECTED SOCIAL CHARACTERISTICS IN PUERTO RICO") %>% 
         select(-one_of(c("label", "label_07", "label_08", "predicateType", "group", "limit", "attributes", "required")))
 
-View(target_acs_vars)
+View(acs_vars)
 # Did it work?
 # View(target_acs_vars)
 ```
