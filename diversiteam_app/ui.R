@@ -7,17 +7,13 @@ shinyUI(dashboardPage(
     # Sidebar with a slider input for number of bins
     
     dashboardSidebar(
-        sliderInput("bins",
-                    "Number of bins:",
-                    min = 1,
-                    max = 50,
-                    value = 30),
-        selectInput("island",
-                    "Choose an island:",
-                    choices = xxx,
-                    selected = xxx[1]
+        selectInput("stat",
+                    "Choose your desired statistic:",
+                    choices = stat_choices,
+                    selected = stat_choices[1]
                     
         ),
+    
         fileInput("file",
                   "Choose a file:")
     ),
@@ -27,7 +23,7 @@ shinyUI(dashboardPage(
         fluidRow(
             column(width = 8,
                    box(width = NULL,
-                       plotOutput("distPlot")
+                       plotOutput("base_bargraph")
                    )
             ),
             column(width = 4,
