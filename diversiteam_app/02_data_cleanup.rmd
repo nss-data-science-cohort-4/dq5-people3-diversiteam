@@ -1,0 +1,56 @@
+---
+title: "02_data_cleanup"
+author: "Diversiteam"
+date: "12/12/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+# Load libraries
+library(censusapi)
+library(tidyr)
+library(stringr)
+library(dplyr)
+library(tidyverse)
+```
+
+```{r}
+#Read in acs_5y_2018_data.csv
+
+acs_data <- read_csv("data/acs_5y_2018_data.csv")
+```
+
+```{r}
+View(acs_data)
+```
+```{r}
+acs_data %>% 
+        mutate(race_ethnicity = ifelse(label_04 == "Hispanic or Latino (of any race)",label_04,label_05)) %>%
+        select(label_02,label_04,label_05,race_ethnicity,value)
+```
+
+
+```{r}
+`%nin%` = Negate(`%in%`)
+
+acs_data_convert <- acs_data %>%
+    filter(label_02 %in% c('HISPANIC OR LATINO AND RACE','EDUCATIONAL ATTAINMENT','SEX AND AGE')) %>%
+    mutate(dropDownMain = case_when(label_02 == 'HISPANIC OR LATINO AND RACE' ~ 'Race',
+                                    label_02 == 'EDUCATIONAL ATTAINMENT'~'Education',
+                                    label_02 == 'SEX AND AGE' & label_04 %in% c('Female','Male') ~ 'Sex',
+                                    TRUE ~ 'Age')) %>%
+    mutate(dropDownSub = case_when(label_02 == 'SEX AND AGE' & label_04 %nin% c('Female','Male') ~ label_04,
+                                   label_02 == 'SEX AND AGE' & label_04 %in% c('Female','Male') ~ label_04)) %>%
+    mutate(xValue = case_when(label_02 != 'SEX AND AGE' ~ label_04)) %>%
+    mutate(yValue = value) %>%
+    select(dropDownMain,dropDownSub,xValue,yValue)
+    
+```
+
+```{r}
+view(acs_data_convert)
+```
+
