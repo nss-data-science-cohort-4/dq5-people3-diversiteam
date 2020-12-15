@@ -2,33 +2,50 @@
 shinyUI(dashboardPage(
     
     # Application title
-    dashboardHeader(title = "Diversiteam"),
+    dashboardHeader(title = "Diversiteam App"),
     
-    # Sidebar with a slider input for number of bins
-    
+    # Sidebar
     dashboardSidebar(
+        # And a file input for the spreadsheet
+        fileInput("file",
+                  "Choose a file:"
+                  ),
+        
+        # Ask the user if the file they have uploaded has a header
+        checkboxInput("header",
+                      "Does the file contain a header?",
+                      selected = TRUE
+                      ),
+        
+        # Select whether to show
+        radioButtons("disp", "Display",
+                     choices = c(Head = "head",
+                                 All = "all"),
+                     selected = "head"
+                     ),
+        
+        # With a selector input for the statistic
         selectInput("stat",
                     "Choose your desired statistic:",
                     choices = stat_choices,
                     selected = stat_choices[1]
-                    
-        ),
-    
-        fileInput("file",
-                  "Choose a file:")
+        )
     ),
     
-    # Show a plot of the generated distribution
+    # Body
     dashboardBody(
+        # Create boxes to style each plot
         fluidRow(
-            column(width = 8,
+            # Left plot with the bar graph for the base dataset
+            column(width = 6,
                    box(width = NULL,
                        plotOutput("base_bargraph")
                    )
             ),
-            column(width = 4,
+            # Right plot with the bar graph for the company dataset
+            column(width = 6,
                    box(width = NULL,
-                       plotOutput("barPlot")
+                       tableOutput("company_data_table")
                    )
             )
         )

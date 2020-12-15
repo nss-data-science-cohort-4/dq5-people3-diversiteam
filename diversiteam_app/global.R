@@ -2,7 +2,7 @@ library(shiny)
 library(tidyverse)
 library(shinydashboard)
 
-acs_data <- read_csv("../data/acs_5y_2018_data.csv")
+acs_data <- read_csv("../data/acs_data_converted.csv")
 
-stat_choices <- unique(acs_data$label_02)
+stat_choices <- unique(acs_data$dropDownMain)
 
