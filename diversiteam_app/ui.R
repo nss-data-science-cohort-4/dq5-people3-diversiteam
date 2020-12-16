@@ -7,24 +7,27 @@ shinyUI(dashboardPage(
     # Sidebar
     dashboardSidebar(
         # And a file input for the spreadsheet
-        fileInput("file",
-                  "Choose a file:"
-                  ),
+        fileInput(
+            'file',
+            h4('Upload a CSV or XLSX spreadsheet'),
+            accept = c(
+                'text/csv',
+                'text/comma-separated-values,text/plain',
+                '.csv',
+                '.xlsx'
+                )
+            ),
         
-        # Ask the user if the file they have uploaded has a header
-        checkboxInput("header",
-                      "Does the file contain a header?",
-                      selected = TRUE
-                      ),
+        # Add a selector for file type
+        radioButtons(
+            "fileType_Input",
+            label = h4("Choose file type"),
+            choices = list(".csv/txt" = 1, ".xlsx" = 2),
+            selected = 1,
+            inline = TRUE
+        ),
         
-        # Select whether to show
-        radioButtons("disp", "Display",
-                     choices = c(Head = "head",
-                                 All = "all"),
-                     selected = "head"
-                     ),
-        
-        # With a selector input for the statistic
+        # Create a selector input for the statistic
         selectInput("stat",
                     "Choose your desired statistic:",
                     choices = stat_choices,
