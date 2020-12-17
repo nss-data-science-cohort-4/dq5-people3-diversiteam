@@ -40,7 +40,18 @@ a55t59 <- acs_data$value[acs_data$name=="DP05_0013E"]
 a45t54 <- acs_data$value[acs_data$name=="DP05_0012E"]
 a35t44 <- acs_data$value[acs_data$name=="DP05_0011E"]
 a25t34 <- acs_data$value[acs_data$name=="DP05_0010E"]
-total <-  plus18 - plus64 - a60t64 - a55t59 - a45t54 - a35t44 - a25t34
+a18t24 <-  plus18 - plus64 - a60t64 - a55t59 - a45t54 - a35t44 - a25t34
+
+raceTotal <- acs_data$value[acs_data$name=="DP05_0070E"]
+sexAgeTotal <- acs_data$value[acs_data$name=="DP05_0001E"]
+maleTotal <- acs_data$value[acs_data$name=="DP05_0002E"]
+femaleTotal <- acs_data$value[acs_data$name=="DP05_0003E"]
+eduTotal <- acs_data$value[acs_data$name=="DP02_0058E"]
+
+a55t64 <- a55t59 + a60t64
+
+ag18t24 <- c('18 years and over','20 to 24 years')
+ag55t64 <- c('55 to 59 years','60 to 64 years')
 
 ```
 
@@ -51,27 +62,40 @@ total <-  plus18 - plus64 - a60t64 - a55t59 - a45t54 - a35t44 - a25t34
 
 acs_data_convert <- acs_data %>%
     filter(label_02 %in% c('HISPANIC OR LATINO AND RACE','EDUCATIONAL ATTAINMENT','SEX AND AGE')) %>%
-    filter(label_04 %nin% c('10 to 14 years','15 to 19 years','5 to 9 years')) %>%
+    filter(label_04 %nin% c('10 to 14 years','15 to 19 years','5 to 9 years','62 years and over')) %>%
     filter(name != 'DP05_0024E') %>%
-    mutate(dropDownMain = case_when(label_02 == 'HISPANIC OR LATINO AND RACE' ~ 'Race',
+    mutate(dropDownMain = case_when(label_02 == 'HISPANIC OR LATINO AND RACE' ~ 'Race and Ethnicity',
                                     label_02 == 'EDUCATIONAL ATTAINMENT'~'Education',
                                     label_02 == 'SEX AND AGE' & (label_04 %in% c('Female','Male') |  
                                                                  label_05 %in% c('Female','Male')) ~ 'Sex',
                                     TRUE ~ 'Age')) %>%
-    mutate(dropDownSub = case_when(label_02 == 'SEX AND AGE' & label_04 %in% c('Female','Male') ~ label_04,
+    mutate(dropDownSub = case_when(label_02 == 'SEX AND AGE' & label_04 %in% c('Female','Male') ~ 'Total',
                                    label_02 == 'SEX AND AGE' & label_04 %nin% c('Female','Male')
                                                 & label_05 %in% c('Female','Male') ~ label_04
                                    )) %>%
     mutate(xValue = case_when(label_02 == 'HISPANIC OR LATINO AND RACE' & label_04 == 'Hispanic or Latino (of any race)' ~ label_04,
                               label_02 == 'HISPANIC OR LATINO AND RACE' & label_04 == 'Not Hispanic or Latino' ~ label_05,
-                              label_02 == 'SEX AND AGE' & label_04 %nin% c('Female','Male')
-                                            & label_05 %nin% c('Female','Male')~ label_04,
+                              label_02 == 'SEX AND AGE' & label_05 %nin% c('Female','Male')
+                                            & label_04 %nin% fiveYearGap ~ label_04,
+                              label_02 == 'SEX AND AGE' & label_05 %nin% c('Female','Male')
+                                            & label_04 == '20 to 24 years' ~ '18 to 24 years',
+                              label_02 == 'SEX AND AGE' & label_05 %nin% c('Female','Male')
+                                            & label_04 %in% ag55t64 ~ '55 to 64 years',
                               label_02 != 'SEX AND AGE' & label_02 != 'HISPANIC OR LATINO AND RACE' ~ label_04,
                               label_02 == 'SEX AND AGE' & label_04 %nin% c('Female','Male')
                                                 & label_05 %in% c('Female','Male') ~ label_05)) %>%
-    mutate(yValue = value) %>%
-    mutate(percentEst = value/) %>%
-    select(dropDownMain,dropDownSub,xValue,yValue,percentEst)
+    mutate(yValue = case_when(label_02 == 'SEX AND AGE' & label_05 %nin% c('Female','Male')
+                                            & label_04 == '20 to 24 years' ~ a18t24,
+                              
+                              TRUE ~ value)) %>%
+    select(dropDownMain,dropDownSub,xValue,yValue)  %>%
+    group_by(dropDownMain,dropDownSub, xValue)  %>% 
+    summarise(yValue = sum(yValue)) %>%
+    mutate(percentEst = case_when(dropDownMain == 'Race and Ethnicity' ~ (yValue/raceTotal) * 100,
+                                  dropDownMain == 'Sex' ~ (yValue/sexAgeTotal) * 100,
+                                  dropDownMain == 'Age' ~ (yValue/sexAgeTotal) * 100,
+                                  dropDownMain == 'Education' ~ (yValue/eduTotal)* 100))
+    
     
 ```
 
