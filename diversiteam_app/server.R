@@ -48,7 +48,7 @@ shinyServer(function(input, output) {
             Race %>% 
             select(c(Ethnicity, Total)) %>% 
             filter(Ethnicity == 'Hispanic or Latino') %>% 
-            mutate(dropDownMain = 'Race') %>% 
+            mutate(dropDownMain = 'Race and Ethnicity') %>% 
             rename(xValue = Ethnicity, yValue = Total)
         
         # Create the race/ethnicity dataframe, part 2
@@ -60,7 +60,7 @@ shinyServer(function(input, output) {
                 cols = c("White alone", "Black or African American", "American Indian and Alaska Native", "Asian", "Native Hawaiian and Other Pacific Islander", "Some other race", "Two or more races:"),
                 names_to = "xValue",
                 values_to = "yValue"
-            ) %>% mutate(dropDownMain = 'Race') %>% 
+            ) %>% mutate(dropDownMain = 'Race and Ethnicity') %>% 
             mutate(xValue = sub("Two or more races:", "Two or more races", xValue))
         
         combined <-
@@ -75,14 +75,30 @@ shinyServer(function(input, output) {
         acs_data %>%
             filter(dropDownMain == input$stat) %>% 
             ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
-            geom_bar(stat = 'Identity')
+            geom_col() +
+            xlab('') +
+            ylab(case_when(
+                input$num_or_pct == 'yValue' ~ 'Count',
+                input$num_or_pct == 'percentEst' ~ 'Percent')
+                ) +
+            scale_y_continuous(labels = comma) +
+            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+            theme(plot.title = element_text(hjust = 0.5))
     })
     
     output$company_bargraph <- renderPlot({
         company_data() %>%
             filter(dropDownMain == input$stat) %>% 
             ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
-            geom_bar(stat = 'Identity')
+            geom_col() +
+            xlab('') +
+            ylab(case_when(
+                input$num_or_pct == 'yValue' ~ 'Count',
+                input$num_or_pct == 'percentEst' ~ 'Percent')
+            ) +
+            scale_y_continuous(labels = comma) +
+            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+            theme(plot.title = element_text(hjust = 0.5))
     })
     
 })
