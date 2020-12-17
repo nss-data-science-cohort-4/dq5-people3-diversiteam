@@ -83,8 +83,8 @@ shinyServer(function(input, output) {
                 input$num_or_pct == 'percentEst' ~ 'Percent')
                 ) +
             scale_y_continuous(labels = comma) +
-            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-            theme(plot.title = element_text(hjust = 0.5))
+            theme(axis.text.x = element_text(angle = 40, vjust = 1, hjust=1,size=10,family="Roboto",face="bold")) +
+            theme(plot.title = element_text(hjust = 0.5,size=16,family="Roboto",face="bold"))
     })
     
     output$company_bargraph <- renderPlot({
@@ -99,8 +99,8 @@ shinyServer(function(input, output) {
                 input$num_or_pct == 'percentEst' ~ 'Percent')
             ) +
             scale_y_continuous(labels = comma) +
-            theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-            theme(plot.title = element_text(hjust = 0.5))
+            theme(axis.text.x = element_text(angle = 40, vjust = 1, hjust=1,size=10,family="Roboto",face="bold")) +
+            theme(plot.title = element_text(hjust = 0.5,size=16,family="Roboto",face="bold"))
     })
     
     output$base_treemap <- renderPlot({

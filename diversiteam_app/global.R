@@ -6,6 +6,8 @@ library(dplyr)
 library(ggplot2)
 library(plotly)
 library(treemapify)
+library(extrafont)
+loadfonts(device="win")
 
 require(scales)
 

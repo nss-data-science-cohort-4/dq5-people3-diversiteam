@@ -1,5 +1,6 @@
 # Define UI for application that draws a histogram
 shinyUI(dashboardPage(
+    skin = "yellow",
     
     # Application title
     dashboardHeader(title = "People 3"),
@@ -34,6 +35,9 @@ shinyUI(dashboardPage(
     
     # Body
     dashboardBody(
+        tags$head(
+            tags$link(rel = "stylesheet", type = "text/css", href = "custom.css")
+        ),
         tabsetPanel(
             tabPanel("Bar Graphs",
                 # Create boxes to style each plot
