@@ -6,19 +6,28 @@ shinyUI(dashboardPage(
     
     # Sidebar
     dashboardSidebar(
-        # And a file input for the spreadsheet
-        fileInput(
-            'file',
-            h4('Upload a CSV or XLSX spreadsheet:'),
-            accept = '.xlsx'
-            ),
-        
         # Create a selector input for the statistic
         selectInput(
             "stat",
-            "Choose your desired statistic:",
+            h4("Choose your desired statistic:"),
             choices = stat_choices,
             selected = stat_choices[1]
+        ),
+        
+        # Create a selector for raw #s or %s
+        selectInput(
+            'num_or_pct',
+            h4('Compare by raw #s or %s:'),
+            choices = c("Raw Numbers" = "yValue",
+                        "Percent of Population" = "percentEst"),
+            selected = "Raw Numbers"
+        ),
+        
+        # And a file input for the spreadsheet
+        fileInput(
+            'file',
+            h4('Upload your company demographics excel file:'),
+            accept = '.xlsx'
         )
     ),
     

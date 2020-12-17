@@ -45,7 +45,7 @@ ethnicity <-
   Race %>% 
   select(c(Ethnicity, Total)) %>% 
   filter(Ethnicity == 'Hispanic or Latino') %>% 
-  mutate(dropDownMain = 'Race') %>% 
+  mutate(dropDownMain = 'Race or Ethnicity') %>% 
   rename(xValue = Ethnicity, yValue = Total)
   
 # Create the race/ethnicity dataframe, part 2
@@ -57,7 +57,7 @@ race_pivoted <-
     cols = c("White alone", "Black or African American", "American Indian and Alaska Native", "Asian", "Native Hawaiian and Other Pacific Islander", "Some other race", "Two or more races:"),
     names_to = "xValue",
     values_to = "yValue"
-  ) %>% mutate(dropDownMain = 'Race') %>% 
+  ) %>% mutate(dropDownMain = 'Race or Ethnicity') %>% 
   mutate(xValue = sub("Two or more races:", "Two or more races", xValue))
 
 combined <-

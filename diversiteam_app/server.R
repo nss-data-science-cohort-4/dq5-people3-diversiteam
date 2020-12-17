@@ -74,14 +74,14 @@ shinyServer(function(input, output) {
     output$base_bargraph <- renderPlot({
         acs_data %>%
             filter(dropDownMain == input$stat) %>% 
-            ggplot(aes(x = xValue, y = yValue)) +
+            ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
             geom_bar(stat = 'Identity')
     })
     
     output$company_bargraph <- renderPlot({
         company_data() %>%
             filter(dropDownMain == input$stat) %>% 
-            ggplot(aes(x = xValue, y = yValue)) +
+            ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
             geom_bar(stat = 'Identity')
     })
     
