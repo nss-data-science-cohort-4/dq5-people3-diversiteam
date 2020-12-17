@@ -32,7 +32,24 @@ acs_data %>%
         select(label_02,label_04,label_05,race_ethnicity,value)
 ```
 
+
 ```{r}
+acs_data <- acs_data %>%
+    mutate(label_04 = str_replace_all(label_04,"18 years and over","18+ years")) %>%
+    mutate(label_04 = str_replace_all(label_04,"9th to 12th grade, no diploma","No HS Diploma")) %>%
+    mutate(label_04 = str_replace_all(label_04,"High school graduate \\(includes equivalency\\)","HS Graduate")) %>%
+    mutate(label_04 = str_replace_all(label_04,"Hispanic or Latino \\(of any race\\)","Hispanic or Latino")) %>%
+    mutate(label_04 = str_replace_all(label_04,"18 years and over","18+ years"))%>%
+    mutate(label_05 = str_replace_all(label_04,"American Indian and Alaska Native alone","First Nation"))%>%
+    mutate(label_05 = str_replace_all(label_04,"Black or African American alone","Black or African American"))%>%
+    mutate(label_05 = str_replace_all(label_04,"Native Hawaiian and Other Pacific Islander alone","Pacific Islander"))
+    
+```
+
+
+```{r}
+#Age group variables.
+
 plus18 <- acs_data$value[acs_data$name=="DP05_0021E"]
 plus64 <- acs_data$value[acs_data$name=="DP05_0029E"]
 a60t64 <- acs_data$value[acs_data$name=="DP05_0014E"]
@@ -52,6 +69,9 @@ a55t64 <- a55t59 + a60t64
 
 ag18t24 <- c('18 years and over','20 to 24 years')
 ag55t64 <- c('55 to 59 years','60 to 64 years')
+fiveYearGap <- c(ag18t24,ag55t64)
+
+
 
 ```
 
@@ -92,8 +112,8 @@ acs_data_convert <- acs_data %>%
     group_by(dropDownMain,dropDownSub, xValue)  %>% 
     summarise(yValue = sum(yValue)) %>%
     mutate(percentEst = case_when(dropDownMain == 'Race and Ethnicity' ~ (yValue/raceTotal) * 100,
-                                  dropDownMain == 'Sex' ~ (yValue/sexAgeTotal) * 100,
-                                  dropDownMain == 'Age' ~ (yValue/sexAgeTotal) * 100,
+                                  dropDownMain == 'Sex' ~ (yValue/eduTotal) * 100,
+                                  dropDownMain == 'Age' ~ (yValue/eduTotal) * 100,
                                   dropDownMain == 'Education' ~ (yValue/eduTotal)* 100))
     
     
