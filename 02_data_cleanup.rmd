@@ -39,10 +39,9 @@ acs_data <- acs_data %>%
     mutate(label_04 = str_replace_all(label_04,"9th to 12th grade, no diploma","No HS Diploma")) %>%
     mutate(label_04 = str_replace_all(label_04,"High school graduate \\(includes equivalency\\)","HS Graduate")) %>%
     mutate(label_04 = str_replace_all(label_04,"Hispanic or Latino \\(of any race\\)","Hispanic or Latino")) %>%
-    mutate(label_04 = str_replace_all(label_04,"18 years and over","18+ years"))%>%
-    mutate(label_05 = str_replace_all(label_04,"American Indian and Alaska Native alone","First Nation"))%>%
-    mutate(label_05 = str_replace_all(label_04,"Black or African American alone","Black or African American"))%>%
-    mutate(label_05 = str_replace_all(label_04,"Native Hawaiian and Other Pacific Islander alone","Pacific Islander"))
+    mutate(label_05 = str_replace_all(label_05,"American Indian and Alaska Native alone","First Nation"))%>%
+    mutate(label_05 = str_replace_all(label_05,"Black or African American alone","Black or African American"))%>%
+    mutate(label_05 = str_replace_all(label_05,"Native Hawaiian and Other Pacific Islander alone","Pacific Islander"))
     
 ```
 
@@ -67,7 +66,7 @@ eduTotal <- acs_data$value[acs_data$name=="DP02_0058E"]
 
 a55t64 <- a55t59 + a60t64
 
-ag18t24 <- c('18 years and over','20 to 24 years')
+ag18t24 <- c('18+ years','20 to 24 years')
 ag55t64 <- c('55 to 59 years','60 to 64 years')
 fiveYearGap <- c(ag18t24,ag55t64)
 
@@ -93,7 +92,7 @@ acs_data_convert <- acs_data %>%
                                    label_02 == 'SEX AND AGE' & label_04 %nin% c('Female','Male')
                                                 & label_05 %in% c('Female','Male') ~ label_04
                                    )) %>%
-    mutate(xValue = case_when(label_02 == 'HISPANIC OR LATINO AND RACE' & label_04 == 'Hispanic or Latino (of any race)' ~ label_04,
+    mutate(xValue = case_when(label_02 == 'HISPANIC OR LATINO AND RACE' & label_04 == 'Hispanic or Latino' ~ label_04,
                               label_02 == 'HISPANIC OR LATINO AND RACE' & label_04 == 'Not Hispanic or Latino' ~ label_05,
                               label_02 == 'SEX AND AGE' & label_05 %nin% c('Female','Male')
                                             & label_04 %nin% fiveYearGap ~ label_04,
