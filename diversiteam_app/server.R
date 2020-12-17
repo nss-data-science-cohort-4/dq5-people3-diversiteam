@@ -76,6 +76,7 @@ shinyServer(function(input, output) {
             filter(dropDownMain == input$stat) %>% 
             ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
             geom_col() +
+            ggtitle('Metro Nashville Demographics') +
             xlab('') +
             ylab(case_when(
                 input$num_or_pct == 'yValue' ~ 'Count',
@@ -91,6 +92,7 @@ shinyServer(function(input, output) {
             filter(dropDownMain == input$stat) %>% 
             ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
             geom_col() +
+            ggtitle('Company Demographics') +
             xlab('') +
             ylab(case_when(
                 input$num_or_pct == 'yValue' ~ 'Count',
