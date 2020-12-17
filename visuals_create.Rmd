@@ -20,6 +20,7 @@ library(plotly)
 converted <- read_csv("data/acs_data_converted.csv")
 View()
 ```
+
 ```{r}
 converted %>%
             filter(dropDownMain == "Education") %>% 
@@ -36,17 +37,24 @@ converted %>%
             drop_na(xValue)
 ```
 
-
 ```{r}
 edu_bar_plotly %>%
   filter(dropDownMain == "Education") %>%
-  filter(xValue != "NA") %>%
-  filter(!is.na(xValue)) %>%
-  mutate(xValue = factor(xValue, levels = c('Less than 9th grade', '9th to 12th grade, no diploma', 'High school graduate (includes equivalency)', 'Some college, no degree', "Bachelor's degree", 'Graduate or professional degree'))) %>% 
+  drop_na(xValue) %>%
+  #options(scipen = 999) %>%  #tried for sci-notation
+  mutate(xValue = factor(xValue, levels = c('Less than 9th grade', '9th to 12th grade, no diploma', 'High school graduate (includes equivalency)', 'Some college, no degree', "Bachelor's degree", 'Graduate or professional degree'))) %>%
   ggplot(aes(x = xValue, y = yValue, na.rm = TRUE)) +
   geom_col() +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+  ggtitle('TEST') +
+  xlab('x test') +
+  ylab('y test') +
+  #scale_x_numeric(labels = comma) +  #tried for sci-notation
+  #scale_x_discrete(labels = comma) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  theme(plot.title = element_text(hjust = 0.5))
 ```
+
+
 ```{r}
 unique(converted$xValue)
 ```
