@@ -82,7 +82,7 @@ fiveYearGap <- c(ag18t24,ag55t64)
 
 acs_data_convert <- acs_data %>%
     filter(label_02 %in% c('HISPANIC OR LATINO AND RACE','EDUCATIONAL ATTAINMENT','SEX AND AGE')) %>%
-    filter(label_04 %nin% c('10 to 14 years','15 to 19 years','5 to 9 years','62 years and over')) %>%
+    filter(label_04 %nin% c('10 to 14 years','15 to 19 years','5 to 9 years','62 years and over','65 years and over')) %>%
     filter(name != 'DP05_0024E') %>%
     mutate(dropDownMain = case_when(label_02 == 'HISPANIC OR LATINO AND RACE' ~ 'Race and Ethnicity',
                                     label_02 == 'EDUCATIONAL ATTAINMENT'~'Education',
@@ -112,8 +112,8 @@ acs_data_convert <- acs_data %>%
     group_by(dropDownMain,dropDownSub, xValue)  %>% 
     summarise(yValue = sum(yValue)) %>%
     mutate(percentEst = case_when(dropDownMain == 'Race and Ethnicity' ~ (yValue/raceTotal) * 100,
-                                  dropDownMain == 'Sex' ~ (yValue/eduTotal) * 100,
-                                  dropDownMain == 'Age' ~ (yValue/eduTotal) * 100,
+                                  dropDownMain == 'Sex' ~ (yValue/sexAgeTotal) * 100,
+                                  dropDownMain == 'Age' ~ (yValue/sexAgeTotal) * 100,
                                   dropDownMain == 'Education' ~ (yValue/eduTotal)* 100))
     
     
