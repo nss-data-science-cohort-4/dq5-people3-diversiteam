@@ -18,12 +18,14 @@ shinyServer(function(input, output) {
             select(c('Sex', 'Total')) %>% 
             filter(Sex != 'Total') %>% 
             mutate(dropDownMain = 'Sex') %>% 
+            #mutate(xValue = factor(xValue, levels = bar_order_sex)) %>%  
             rename(xValue = Sex, yValue = Total)
         
         # Create the age dataframe
         age_pivoted <-
             Age %>% 
             filter(Sex == 'Total') %>% 
+            #mutate(xValue = factor(xValue, levels = bar_order_age)) %>%  
             select(-c(Total, Sex)) %>%
             pivot_longer(
                 cols = c('Under 20 years', '20 to 29 years', '30 to 39 years', '40 to 49 years', '50 to 59 years', '60 years and over'),
@@ -34,7 +36,8 @@ shinyServer(function(input, output) {
         # Create the education dataframe
         education_pivoted <-
             Education %>% 
-            filter(Sex == 'Total') %>% 
+            #mutate(xValue = factor(xValue, levels = bar_order_edu)) %>%
+            filter(Sex == 'Total') %>%  
             select(-c(Sex, Total)) %>%
             pivot_longer(
                 cols = c("No High School Diploma", "High school graduate (includes equivalency)", "Some college, no degree", "Associate's degree", "Bachelor's degree", "Master's degree", "Professional school degree", "Doctorate degree"),
@@ -73,7 +76,9 @@ shinyServer(function(input, output) {
     
     output$base_bargraph <- renderPlot({
         acs_data %>%
-            filter(dropDownMain == input$stat) %>% 
+            filter(dropDownMain == input$stat) %>%
+            mutate(xValue=factor(xValue,levels=c(bar_order_race,bar_order_age,bar_order_sex,bar_order_edu))) %>%
+            drop_na(xValue) %>%
             ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
             geom_col() +
             ggtitle('Metro Nashville Demographics') +
@@ -89,7 +94,9 @@ shinyServer(function(input, output) {
     
     output$company_bargraph <- renderPlot({
         company_data() %>%
-            filter(dropDownMain == input$stat) %>% 
+            filter(dropDownMain == input$stat) %>%
+            mutate(xValue=factor(xValue,levels=c(bar_order_race_c1,bar_order_age_c,bar_order_sex_c,bar_order_edu_c,bar_order_race_c2))) %>%
+            drop_na(xValue) %>%
             ggplot(aes(x = xValue, y = get(input$num_or_pct))) +
             geom_col() +
             ggtitle('Company Demographics') +
