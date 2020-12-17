@@ -41,7 +41,8 @@ acs_data <- acs_data %>%
     mutate(label_04 = str_replace_all(label_04,"Hispanic or Latino \\(of any race\\)","Hispanic or Latino")) %>%
     mutate(label_05 = str_replace_all(label_05,"American Indian and Alaska Native alone","First Nation"))%>%
     mutate(label_05 = str_replace_all(label_05,"Black or African American alone","Black or African American"))%>%
-    mutate(label_05 = str_replace_all(label_05,"Native Hawaiian and Other Pacific Islander alone","Pacific Islander"))
+    mutate(label_05 = str_replace_all(label_05,"Native Hawaiian and Other Pacific Islander alone","Pacific Islander"))%>%
+    mutate(label_05 = str_replace_all(label_05," alone",""))
     
 ```
 
