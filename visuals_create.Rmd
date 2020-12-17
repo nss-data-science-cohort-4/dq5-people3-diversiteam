@@ -1,0 +1,52 @@
+---
+title: "Visualizations"
+author: "Daniel Eaton"
+date: "12/15/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(shiny)
+library(tidyverse)
+library(shinydashboard)
+library(ggplot2)
+library(plotly)
+```
+```{r}
+converted <- read_csv("data/acs_data_converted.csv")
+View()
+```
+```{r}
+converted %>%
+            filter(dropDownMain == "Education") %>% 
+            ggplot(aes(x = xValue, y = yValue)) +
+            geom_bar(stat = 'Identity')
+```
+
+```{r}
+edu_bar_plotly <- 
+converted %>%
+            filter(dropDownMain == "Education") %>%
+            filter(xValue != "NA") %>%
+            filter(is.na(xValue) == FALSE) %>%
+            drop_na(xValue)
+```
+
+
+```{r}
+edu_bar_plotly %>%
+  filter(dropDownMain == "Education") %>%
+  filter(xValue != "NA") %>%
+  filter(!is.na(xValue)) %>%
+  mutate(xValue = factor(xValue, levels = c('Less than 9th grade', '9th to 12th grade, no diploma', 'High school graduate (includes equivalency)', 'Some college, no degree', "Bachelor's degree", 'Graduate or professional degree'))) %>% 
+  ggplot(aes(x = xValue, y = yValue, na.rm = TRUE)) +
+  geom_col() +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1))
+```
+```{r}
+unique(converted$xValue)
+```
