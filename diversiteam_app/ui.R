@@ -2,10 +2,11 @@
 shinyUI(dashboardPage(
     
     # Application title
-    dashboardHeader(title = "Diversiteam App"),
+    dashboardHeader(title = "People 3"),
     
     # Sidebar
     dashboardSidebar(
+        
         # Create a selector input for the statistic
         selectInput(
             "stat",
@@ -33,21 +34,42 @@ shinyUI(dashboardPage(
     
     # Body
     dashboardBody(
-        # Create boxes to style each plot
-        fluidRow(
-            # Left plot with the bar graph for the base dataset
-            column(width = 6,
-                   box(width = NULL,
-                       plotOutput("base_bargraph")
-                   )
+        tabsetPanel(
+            tabPanel("Bar Graphs",
+                # Create boxes to style each plot
+                fluidRow(
+                    # Left plot with the bar graph for the base dataset
+                    column(width = 6,
+                           box(width = NULL,
+                               plotOutput("base_bargraph")
+                           )
+                    ),
+                    # Right plot with the bar graph for the company dataset
+                    column(width = 6,
+                           box(width = NULL,
+                               plotOutput("company_bargraph")
+                           )
+                    )
+                )
             ),
-            # Right plot with the bar graph for the company dataset
-            column(width = 6,
-                   box(width = NULL,
-                       plotOutput("company_bargraph")
-                   )
+            tabPanel("Treemaps",
+                    # Create boxes to style each plot
+                    fluidRow(
+                        # Left plot with the bar graph for the base dataset
+                        column(width = 6,
+                               box(width = NULL,
+                                   plotOutput("base_treemap")
+                               )
+                        ),
+                        # Right plot with the bar graph for the company dataset
+                        column(width = 6,
+                               box(width = NULL,
+                                   plotOutput("company_treemap")
+                               )
+                        )
+                    )
             )
-        )
+            )
     )
 )
 )

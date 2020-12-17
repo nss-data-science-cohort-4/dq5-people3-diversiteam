@@ -103,4 +103,21 @@ shinyServer(function(input, output) {
             theme(plot.title = element_text(hjust = 0.5))
     })
     
+    output$base_treemap <- renderPlot({
+        acs_data %>% 
+            filter(dropDownMain == input$stat) %>% 
+            ggplot(aes(area = get(input$num_or_pct), fill = percentEst, label = paste(xValue,paste((round(percentEst, 0)),"%",sep=""),sep="\n"))) +
+            geom_treemap() +
+            ggtitle('Metro Nashville Demographics') +
+            geom_treemap_text(colour = "white", place = "topleft", reflow = T)
+    })
+    
+    output$company_treemap <- renderPlot({
+        company_data() %>%
+            filter(dropDownMain == input$stat) %>% 
+            ggplot(aes(area = get(input$num_or_pct), fill = percentEst, label = paste(xValue,paste((round(percentEst, 0)),"%",sep=""),sep="\n"))) +
+            geom_treemap() +
+            ggtitle('Company Demographics') +
+            geom_treemap_text(colour = "white", place = "topleft", reflow = T)
+    })
 })
