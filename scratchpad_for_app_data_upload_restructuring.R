@@ -51,7 +51,7 @@ ethnicity <-
 # Create the race/ethnicity dataframe, part 2
 race_pivoted <-
   Race %>% 
-  filter(Ethnicity == 'Total') %>% 
+  filter(Ethnicity == 'Not Hispanic or Latino') %>% 
   select(-c('Total', 'Ethnicity', 'Two races including Some other race', 'Two races excluding Some other race, and three or more races')) %>%
   pivot_longer(
     cols = c("White alone", "Black or African American", "American Indian and Alaska Native", "Asian", "Native Hawaiian and Other Pacific Islander", "Some other race", "Two or more races:"),
@@ -61,4 +61,9 @@ race_pivoted <-
   mutate(xValue = sub("Two or more races:", "Two or more races", xValue))
 
 combined <-
-  bind_rows(race_pivoted, ethnicity, education_pivoted, age_pivoted, sex)
+  bind_rows(race_pivoted, ethnicity, education_pivoted, age_pivoted, sex) %>% 
+  group_by(dropDownMain) %>% 
+  mutate(Total = sum(yValue)) %>% 
+  mutate(percentEst = yValue / Total * 100) %>% 
+  select(-Total)
+
