@@ -114,7 +114,8 @@ acs_data_convert <- acs_data %>%
     mutate(percentEst = case_when(dropDownMain == 'Race and Ethnicity' ~ (yValue/raceTotal) * 100,
                                   dropDownMain == 'Sex' ~ (yValue/sexAgeTotal) * 100,
                                   dropDownMain == 'Age' ~ (yValue/sexAgeTotal) * 100,
-                                  dropDownMain == 'Education' ~ (yValue/eduTotal)* 100))
+                                  dropDownMain == 'Education' ~ (yValue/eduTotal)* 100)) %>% 
+    subset(dropDownSub != "18+ years" | is.na(dropDownSub))
     
     
 ```
